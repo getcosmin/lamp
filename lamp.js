@@ -1,8 +1,8 @@
 
 
 const LAMP = {
-    selectors: {
-        // SELECTORS - Used to select content on the webpage.
+    select: {
+        // select - Used to select data on the webpage
         title: document.querySelector('title'),
         meta: document.querySelectorAll('meta'),
         paragraphs: document.querySelectorAll('p'),
@@ -12,8 +12,9 @@ const LAMP = {
         h4: document.querySelectorAll('h4'),
         listItems: document.querySelectorAll('li')
     },
-    // CONTENT - Used to store all the webpage as text.
-    content: {
+    
+    data: {
+        // DATA - used to store website data as objects
         h2: {
     
         }
@@ -23,47 +24,56 @@ const LAMP = {
 
     },
 
-    // START - Used to store all the functions
     run: {
-        main: () => {
-            LAMP.run.title();
-            LAMP.run.description();
-            LAMP.run.h2();
-        },
-
-        // 01 - Store Page Title
-
+        
         title: () => {
-            LAMP.content.title = {
-                text: LAMP.selectors.title.innerText,
-                chars: LAMP.selectors.title.innerText.length,
-                words: LAMP.selectors.title.innerText.split(' ').length
-
+            // TITLE - store the webpage title
+            LAMP.data.title = {
+                text: LAMP.select.title.innerText,
+                chars: LAMP.select.title.innerText.length,
+                words: LAMP.select.title.innerText.split(' ').length
             }
         },
-        
-        // 02 - Store Meta Description
 
         description: () => {
-            LAMP.selectors.meta.forEach((element, index) => {
-                if (LAMP.selectors.meta[index].attributes[0].value === 'description') {
-                    LAMP.content.description = element.attributes[1].value;
+             // 02 - Store Meta Description
+            LAMP.select.meta.forEach((element, index) => {
+                if (LAMP.select.meta[index].attributes[0].value === 'description') {
+                    LAMP.data.description = element.attributes[1].value;
                 }
             })
         },
 
-        // 03 - Store Headings 
-
-        h2: () => {
-            LAMP.selectors.h2.forEach((element, index) => {
-                 LAMP.content.h2[index] = {
-                    text: element.innerText,
-                    chars: element.innerText.length,
-                    words: element.innerText.split(' ').length
-                 }
-                 
-            })
-        }
-        
-    }
+        headers: () => {
+            // 03 - Storing H2 headers
+            LAMP.select.h2.forEach((element, index) => {
+                LAMP.data.h2[index] = {
+                   text: element.innerText,
+                   chars: element.innerText.length,
+                   words: element.innerText.split(' ').length
+                }
+                
+           })
+       },
+   },
+   start: () => {
+       // Execute LAMP App
+       LAMP.run.title();
+       LAMP.run.description();
+       LAMP.run.headers();
+   }
 }
+
+const lampFrame = document.createElement('div');
+
+LAMP.start();
+
+function lampNavigation() {
+    document.body.prepend(lampFrame);
+    lampFrame.classList.add('lamp');
+
+
+    document.body.style.marginTop = "64px";
+    lampFrame.innerHTML = LAMP.data.title.text;
+}
+lampNavigation();

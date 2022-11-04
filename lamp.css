@@ -1,0 +1,28 @@
+:root {
+    --color-note: #171a1c;
+    --color-white: #ffffff;
+    --color-accent: #1478ff;
+    --color-accent-05: #f2f5fc;
+    --color-primary: #121518;
+    --color-primary-90: #23277a;
+    --color-primary-80: #3a4146;
+    --color-primary-70: #515b62;
+    --color-primary-60: #68757e;
+    --color-primary-50: #818e97;
+    --color-primary-40: #9da7ae;
+    --color-primary-30: #b9c0c5;
+    --color-primary-20: #d5d9dc;
+    --color-primary-10: #f1f2f3;
+
+}
+
+.lamp {
+    background-color: var(--color-primary-10);
+    padding: 24px;
+    top: 0px;
+    border-bottom: 1px solid var(--color-primary-20);
+    position: fixed;
+    z-index: 50000;
+    height: 64px;
+    width: 100vw;
+}
