@@ -1,20 +1,22 @@
 const countTotalWords = [];
 
 const LAMP = {
+
     select: {
-        // select - Used to select data on the webpage
+
+        // SELECT webpage text for later use.
         title: document.querySelector('title'),
         meta: document.querySelectorAll('meta'),
-        paragraphs: document.querySelectorAll('p'),
-        listItems: document.querySelectorAll('li'),
-        headers: document.querySelectorAll('h1, h2, h3, h4, h5, h6')
+        text: document.querySelectorAll('h1, h2, h3, h4, h5, h6, p, li')
     },
     
     data: {
+
+        // SECTIONS to store text based on type.
         H1: {
 
         },
-        // DATA - used to store website data as objects
+
         H2: {
     
         },
@@ -30,7 +32,10 @@ const LAMP = {
         H6: {
     
         },
-        paragraphs: {
+        P: {
+
+        },
+        LI: {
 
         }
     },
@@ -60,64 +65,58 @@ const LAMP = {
                 }
             })
         },
-        updateHead: (element, index) => {
-            LAMP.data[element.tagName][index] = {
-                text: element.innerText,
-                chars: element.innerText.length,
-                words: element.innerText.split(' ').length
-             }
-        },
-        headers: () => {
-            // 03 - Storing H2 headers
-            LAMP.select.headers.forEach((element, index) => {
-                const isHeader = element.tagName;
 
-                if (isHeader === 'H1') {
+        getText: () => {
 
-                    LAMP.run.updateHead(element, index);
+            // 03 - SCAN the webpage and get all the text.
+            LAMP.select.text.forEach((element, index) => {
+                
+                const isText = element.tagName;
+
+                const storeText = () => {
+                    LAMP.data[element.tagName][index] = {
+                        text: element.innerText,
+                        chars: element.innerText.length,
+                        words: element.innerText.split(' ').length
+                     }
+                }
+
+                // CHECK <tags> and store text per based on type.
+                if (isText === 'H1') {
+                    storeText();
+
+                } else if (isText === 'H2') {
+                    storeText();
                     
-                } else if (isHeader === 'H2') {
-
-                    LAMP.run.updateHead(element, index);
+                } else if (isText === 'H3') {
+                    storeText();
                     
-                } else if (isHeader === 'H3') {
-
-                    LAMP.run.updateHead(element, index);
+                } else if (isText === 'H4') {
+                    storeText();
                     
-                } else if (isHeader === 'H4') {
-
-                    LAMP.run.updateHead(element, index);
+                } else if (isText === 'H5') {
+                    storeText();
                     
-                } else if (isHeader === 'H5') {
-
-                    LAMP.run.updateHead(element, index);
+                } else if (isText === 'H6') {
+                    storeText();
                     
-                } else if (isHeader === 'H6') {
+                } else if (isText === 'P') {
+                    storeText();
 
-                    LAMP.run.updateHead(element, index);
+                } else if (isText === 'LI') {
+                    storeText();
                     
                 }
                 countTotalWords.push(element.innerText.split(' ').length);     
            })
        },
-       paragraphs: () => {
-        // 03 - Storing H2 headers
-        LAMP.select.paragraphs.forEach((element, index) => {
-            LAMP.data.paragraphs[index] = {
-               text: element.innerText,
-               chars: element.innerText.length,
-               words: element.innerText.split(' ').length
-            }
-            countTotalWords.push(element.innerText.split(' ').length);     
-       })
    },
-   },
+
    start: () => {
        // Execute LAMP App
        LAMP.run.title();
        LAMP.run.description();
-       LAMP.run.headers();
-       LAMP.run.paragraphs();
+       LAMP.run.getText();
    }
 }
 
@@ -126,7 +125,7 @@ const lampFrame = document.createElement('div');
 
 LAMP.start();
 
-// 01 - Create App Frame
+// 01 - Build LAMP App
 function createLAMP() {
     document.body.prepend(lampFrame);
     lampFrame.classList.add('lamp');
