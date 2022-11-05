@@ -4,40 +4,34 @@ const LAMP = {
 
     select: {
 
-        // SELECT webpage text for later use.
-        title: document.querySelector('title'),
-        meta: document.querySelectorAll('meta'),
-        text: document.querySelectorAll('h1, h2, h3, h4, h5, h6, p, li')
+        meta: {
+            title: document.querySelector('title'),
+            description: document.querySelectorAll('meta'),
+        },
+
+        text: {
+            h1: document.querySelectorAll('h1'),
+            h2: document.querySelectorAll('h2'),
+            h3: document.querySelectorAll('h3'),
+            h4: document.querySelectorAll('h4'),
+            h5: document.querySelectorAll('h5'),
+            h6: document.querySelectorAll('h6'),
+            p: document.querySelectorAll('p'),
+            li: document.querySelectorAll('li')
+        }
     },
     
     data: {
 
-        // SECTIONS to store text based on type.
-        H1: {
-
-        },
-
-        H2: {
-    
-        },
-        H3: {
-    
-        },
-        H4: {
-    
-        },
-        H5: {
-    
-        },
-        H6: {
-    
-        },
-        P: {
-
-        },
-        LI: {
-
-        }
+        H1: {},
+        H2: {},
+        H3: {},
+        H4: {},
+        H5: {},
+        H6: {},
+        P: {},
+        LI: {} 
+        
     },
 
     run: {
@@ -45,17 +39,17 @@ const LAMP = {
         title: () => {
             // TITLE - store the webpage title
             LAMP.data.title = {
-                text: LAMP.select.title.innerText,
-                chars: LAMP.select.title.innerText.length,
-                words: LAMP.select.title.innerText.split(' ').length
+                text: LAMP.select.meta.title.innerText,
+                chars: LAMP.select.meta.title.innerText.length,
+                words: LAMP.select.meta.title.innerText.split(' ').length
             }
-            countTotalWords.push(LAMP.select.title.innerText.split(' ').length);     
+            countTotalWords.push(LAMP.select.meta.title.innerText.split(' ').length);     
         },
 
         description: () => {
              // 02 - Store Meta Description
-            LAMP.select.meta.forEach((element, index) => {
-                if (LAMP.select.meta[index].attributes[0].value === 'description') {
+            LAMP.select.meta.description.forEach((element, index) => {
+                if (LAMP.select.meta.description[index].attributes[0].value === 'description') {
                     LAMP.data.description = {
                         text: element.attributes[1].value,
                         chars: element.attributes[1].value.length,
@@ -68,47 +62,16 @@ const LAMP = {
 
         getText: () => {
 
-            // 03 - SCAN the webpage and get all the text.
-            LAMP.select.text.forEach((element, index) => {
-                
-                const isText = element.tagName;
-
-                const storeText = () => {
-                    LAMP.data[element.tagName][index] = {
-                        text: element.innerText,
-                        chars: element.innerText.length,
-                        words: element.innerText.split(' ').length
-                     }
-                }
-
-                // CHECK <tags> and store text per based on type.
-                if (isText === 'H1') {
-                    storeText();
-
-                } else if (isText === 'H2') {
-                    storeText();
-                    
-                } else if (isText === 'H3') {
-                    storeText();
-                    
-                } else if (isText === 'H4') {
-                    storeText();
-                    
-                } else if (isText === 'H5') {
-                    storeText();
-                    
-                } else if (isText === 'H6') {
-                    storeText();
-                    
-                } else if (isText === 'P') {
-                    storeText();
-
-                } else if (isText === 'LI') {
-                    storeText();
-                    
-                }
-                countTotalWords.push(element.innerText.split(' ').length);     
-           })
+                for (text in LAMP.select.text) {
+                    LAMP.select.text[text].forEach((element, index) => {
+                        LAMP.data[element.tagName][index] = {
+                            text: element.innerText,
+                            chars: element.innerText.length,
+                            words: element.innerText.split(' ').length
+                         }
+                         countTotalWords.push(element.innerText.split(' ').length);  
+                    })
+                }       
        },
    },
 
