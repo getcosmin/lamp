@@ -11,23 +11,23 @@ const LAMP = {
     },
     
     data: {
-        h1: {
+        H1: {
 
         },
         // DATA - used to store website data as objects
-        h2: {
+        H2: {
     
         },
-        h3: {
+        H3: {
     
         },
-        h4: {
+        H4: {
     
         },
-        h5: {
+        H5: {
     
         },
-        h6: {
+        H6: {
     
         },
         paragraphs: {
@@ -60,45 +60,42 @@ const LAMP = {
                 }
             })
         },
+        updateHead: (element, index) => {
+            LAMP.data[element.tagName][index] = {
+                text: element.innerText,
+                chars: element.innerText.length,
+                words: element.innerText.split(' ').length
+             }
+        },
         headers: () => {
             // 03 - Storing H2 headers
             LAMP.select.headers.forEach((element, index) => {
-                if (element.tagName === 'H1') {
-                    LAMP.data.h1[index] = {
-                        text: element.innerText,
-                        chars: element.innerText.length,
-                        words: element.innerText.split(' ').length
-                     }
-                } else if (element.tagName === 'H2') {
-                    LAMP.data.h2[index] = {
-                        text: element.innerText,
-                        chars: element.innerText.length,
-                        words: element.innerText.split(' ').length
-                     }
-                } else if (element.tagName === 'H3') {
-                    LAMP.data.h3[index] = {
-                        text: element.innerText,
-                        chars: element.innerText.length,
-                        words: element.innerText.split(' ').length
-                     }
-                } else if (element.tagName === 'H4') {
-                    LAMP.data.h4[index] = {
-                        text: element.innerText,
-                        chars: element.innerText.length,
-                        words: element.innerText.split(' ').length
-                     }
-                } else if (element.tagName === 'H5') {
-                    LAMP.data.h5[index] = {
-                        text: element.innerText,
-                        chars: element.innerText.length,
-                        words: element.innerText.split(' ').length
-                    }
-                } else if (element.tagName === 'H6') {
-                    LAMP.data.h6[index] = {
-                        text: element.innerText,
-                        chars: element.innerText.length,
-                        words: element.innerText.split(' ').length
-                    }
+                const isHeader = element.tagName;
+
+                if (isHeader === 'H1') {
+
+                    LAMP.run.updateHead(element, index);
+                    
+                } else if (isHeader === 'H2') {
+
+                    LAMP.run.updateHead(element, index);
+                    
+                } else if (isHeader === 'H3') {
+
+                    LAMP.run.updateHead(element, index);
+                    
+                } else if (isHeader === 'H4') {
+
+                    LAMP.run.updateHead(element, index);
+                    
+                } else if (isHeader === 'H5') {
+
+                    LAMP.run.updateHead(element, index);
+                    
+                } else if (isHeader === 'H6') {
+
+                    LAMP.run.updateHead(element, index);
+                    
                 }
                 countTotalWords.push(element.innerText.split(' ').length);     
            })
