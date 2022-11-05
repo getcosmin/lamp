@@ -1,4 +1,4 @@
-
+const countTotalWords = [];
 
 const LAMP = {
     select: {
@@ -6,22 +6,33 @@ const LAMP = {
         title: document.querySelector('title'),
         meta: document.querySelectorAll('meta'),
         paragraphs: document.querySelectorAll('p'),
-        h1: document.querySelectorAll('h1'),
-        h2: document.querySelectorAll('h2'),
-        h3: document.querySelectorAll('h3'),
-        h4: document.querySelectorAll('h4'),
-        listItems: document.querySelectorAll('li')
+        listItems: document.querySelectorAll('li'),
+        headers: document.querySelectorAll('h1, h2, h3, h4, h5, h6')
     },
     
     data: {
+        h1: {
+
+        },
         // DATA - used to store website data as objects
         h2: {
     
+        },
+        h3: {
+    
+        },
+        h4: {
+    
+        },
+        h5: {
+    
+        },
+        h6: {
+    
+        },
+        paragraphs: {
+
         }
-
-    },
-    words: {
-
     },
 
     run: {
@@ -33,47 +44,121 @@ const LAMP = {
                 chars: LAMP.select.title.innerText.length,
                 words: LAMP.select.title.innerText.split(' ').length
             }
+            countTotalWords.push(LAMP.select.title.innerText.split(' ').length);     
         },
 
         description: () => {
              // 02 - Store Meta Description
             LAMP.select.meta.forEach((element, index) => {
                 if (LAMP.select.meta[index].attributes[0].value === 'description') {
-                    LAMP.data.description = element.attributes[1].value;
+                    LAMP.data.description = {
+                        text: element.attributes[1].value,
+                        chars: element.attributes[1].value.length,
+                        words: element.attributes[1].value.split(' ').length
+                    }
+                    countTotalWords.push(element.innerText.split(' ').length);     
                 }
             })
         },
-
         headers: () => {
             // 03 - Storing H2 headers
-            LAMP.select.h2.forEach((element, index) => {
-                LAMP.data.h2[index] = {
-                   text: element.innerText,
-                   chars: element.innerText.length,
-                   words: element.innerText.split(' ').length
+            LAMP.select.headers.forEach((element, index) => {
+                if (element.tagName === 'H1') {
+                    LAMP.data.h1[index] = {
+                        text: element.innerText,
+                        chars: element.innerText.length,
+                        words: element.innerText.split(' ').length
+                     }
+                } else if (element.tagName === 'H2') {
+                    LAMP.data.h2[index] = {
+                        text: element.innerText,
+                        chars: element.innerText.length,
+                        words: element.innerText.split(' ').length
+                     }
+                } else if (element.tagName === 'H3') {
+                    LAMP.data.h3[index] = {
+                        text: element.innerText,
+                        chars: element.innerText.length,
+                        words: element.innerText.split(' ').length
+                     }
+                } else if (element.tagName === 'H4') {
+                    LAMP.data.h4[index] = {
+                        text: element.innerText,
+                        chars: element.innerText.length,
+                        words: element.innerText.split(' ').length
+                     }
+                } else if (element.tagName === 'H5') {
+                    LAMP.data.h5[index] = {
+                        text: element.innerText,
+                        chars: element.innerText.length,
+                        words: element.innerText.split(' ').length
+                    }
+                } else if (element.tagName === 'H6') {
+                    LAMP.data.h6[index] = {
+                        text: element.innerText,
+                        chars: element.innerText.length,
+                        words: element.innerText.split(' ').length
+                    }
                 }
-                
+                countTotalWords.push(element.innerText.split(' ').length);     
            })
        },
+       paragraphs: () => {
+        // 03 - Storing H2 headers
+        LAMP.select.paragraphs.forEach((element, index) => {
+            LAMP.data.paragraphs[index] = {
+               text: element.innerText,
+               chars: element.innerText.length,
+               words: element.innerText.split(' ').length
+            }
+            countTotalWords.push(element.innerText.split(' ').length);     
+       })
+   },
    },
    start: () => {
        // Execute LAMP App
        LAMP.run.title();
        LAMP.run.description();
        LAMP.run.headers();
+       LAMP.run.paragraphs();
    }
 }
 
+// Create DIV
 const lampFrame = document.createElement('div');
 
 LAMP.start();
 
-function lampNavigation() {
+// 01 - Create App Frame
+function createLAMP() {
     document.body.prepend(lampFrame);
     lampFrame.classList.add('lamp');
-
-
     document.body.style.marginTop = "64px";
-    lampFrame.innerHTML = LAMP.data.title.text;
+
+    // 02 - Create 4 DIVs loop inside App Frame
+    for (i = 0; i < 4; i++) {
+        const newFrame = document.createElement('div');
+        document.querySelector('.lamp').appendChild(newFrame);
+    }
+
+    const selectDiv = document.querySelectorAll('.lamp > div');
+
+    const createImage = document.createElement('img');
+
+    selectDiv[0].appendChild(createImage).classList.add('logo');
+
+    getImage = document.querySelector('.logo');
+    getImage.src = "https://getcosmin.dev/assets/misc/lamp/lamp.svg";
+
+    
+    // 03 - Add inner DIVs with KPI
+    selectDiv[1].innerHTML = '<span class="text" id="seo-box">GRADE</span>  <span class="text" id="seo-score">96</span>';
+    selectDiv[2].innerHTML = '<div class="sp20"> <p class="text"> WORD COUNT </p>  <p class="text note">1024 </p> </div>'
+                           + '<div class="sp20"> <p class="text"> LINKS </p>  <p class="text note">64 </p> </div>'
+                           + '<div class="sp20"> <p class="text"> IMAGES </p>  <p class="text note">64 </p> </div>';
+
+    selectDiv[2].classList.add('flex');
+
 }
-lampNavigation();
+
+createLAMP();
