@@ -1,4 +1,6 @@
 const countTotalWords = [];
+let getTotalLinks = 0;
+let getTotalImages = 0;
 
 const LAMP = {
 
@@ -17,7 +19,15 @@ const LAMP = {
             h5: document.querySelectorAll('h5'),
             h6: document.querySelectorAll('h6'),
             p: document.querySelectorAll('p'),
-            li: document.querySelectorAll('li')
+            li: document.querySelectorAll('li'),        
+        },
+
+        links: {
+            href: document.querySelectorAll('a')
+        },
+
+        images: {
+            img: document.querySelectorAll('img')
         }
     },
     
@@ -30,14 +40,17 @@ const LAMP = {
         H5: {},
         H6: {},
         P: {},
-        LI: {} 
+        LI: {},
+        HREF: {},
+        IMG: {}
         
     },
 
     run: {
         
-        title: () => {
-            // TITLE - store the webpage title
+        getTitle: () => {
+
+            // 01 - GET TITLE from webpage
             LAMP.data.title = {
                 text: LAMP.select.meta.title.innerText,
                 chars: LAMP.select.meta.title.innerText.length,
@@ -46,8 +59,9 @@ const LAMP = {
             countTotalWords.push(LAMP.select.meta.title.innerText.split(' ').length);     
         },
 
-        description: () => {
-             // 02 - Store Meta Description
+        getDescription: () => {
+
+             // 02 - GET META description from webpage
             LAMP.select.meta.description.forEach((element, index) => {
                 if (LAMP.select.meta.description[index].attributes[0].value === 'description') {
                     LAMP.data.description = {
@@ -62,24 +76,60 @@ const LAMP = {
 
         getText: () => {
 
-                for (text in LAMP.select.text) {
-                    LAMP.select.text[text].forEach((element, index) => {
-                        LAMP.data[element.tagName][index] = {
-                            text: element.innerText,
-                            chars: element.innerText.length,
-                            words: element.innerText.split(' ').length
-                         }
-                         countTotalWords.push(element.innerText.split(' ').length);  
-                    })
-                }       
-       },
-   },
+            // 03 - GET Text from webpage
+            for (text in LAMP.select.text) {
+                LAMP.select.text[text].forEach((element, index) => {
+                    LAMP.data[element.tagName][index] = {
+                        text: element.innerText,
+                        chars: element.innerText.length,
+                        words: element.innerText.split(' ').length
+                    }
+
+                    countTotalWords.push(element.innerText.split(' ').length);  
+
+                })
+            }       
+        },
+
+        getTotalWords: () => {
+            
+            // 04 - SUM the array and calculate total words on webpage
+            getTotalWords = countTotalWords.reduce((a, b) => a + b, 0)
+        },
+
+        getLinks: () => {
+            
+            // 05 - GET LINKS from webpage which have https
+            LAMP.select.links.href.forEach((element, index) => {
+                if (element.attributes.href.value.includes('https://')) {
+                    LAMP.data.HREF[index] = {
+                        link: element.attributes.href.value,
+                    }
+                    getTotalLinks++;
+                } 
+            })
+        },
+
+        getImages: () => {
+            LAMP.select.images.img.forEach((element, index) => {
+                LAMP.data[element.tagName][index] = {
+                    alt: LAMP.select.images.img[index].alt,
+                    chars: LAMP.select.images.img[index].alt.length,
+                    words: LAMP.select.images.img[index].alt.split(' ').length,
+                }
+            }) 
+        }
+    },
 
    start: () => {
-       // Execute LAMP App
-       LAMP.run.title();
-       LAMP.run.description();
+
+       // Execute LAMP Functions
+       LAMP.run.getTitle();
+       LAMP.run.getDescription();
        LAMP.run.getText();
+       LAMP.run.getTotalWords();
+       LAMP.run.getLinks();
+       LAMP.run.getImages();
    }
 }
 
@@ -88,13 +138,14 @@ const lampFrame = document.createElement('div');
 
 LAMP.start();
 
-// 01 - Build LAMP App
 function createLAMP() {
+
+    // 01 - CREATE Lamp App
     document.body.prepend(lampFrame);
     lampFrame.classList.add('lamp');
     document.body.style.marginTop = "64px";
 
-    // 02 - Create 4 DIVs loop inside App Frame
+    // 02 - CREATE 4 <div> inside LAMP App
     for (i = 0; i < 4; i++) {
         const newFrame = document.createElement('div');
         document.querySelector('.lamp').appendChild(newFrame);
@@ -102,6 +153,7 @@ function createLAMP() {
 
     const selectDiv = document.querySelectorAll('.lamp > div');
 
+    // 03 - CREATE logo for the App
     const createImage = document.createElement('img');
 
     selectDiv[0].appendChild(createImage).classList.add('logo');
@@ -111,10 +163,21 @@ function createLAMP() {
 
     
     // 03 - Add inner DIVs with KPI
-    selectDiv[1].innerHTML = '<span class="text" id="seo-box">GRADE</span>  <span class="text" id="seo-score">96</span>';
-    selectDiv[2].innerHTML = '<div class="sp20"> <p class="text"> WORD COUNT </p>  <p class="text note">1024 </p> </div>'
-                           + '<div class="sp20"> <p class="text"> LINKS </p>  <p class="text note">64 </p> </div>'
-                           + '<div class="sp20"> <p class="text"> IMAGES </p>  <p class="text note">64 </p> </div>';
+    selectDiv[1].innerHTML = `<span class="text" id="seo-box">GRADE</span>  
+                              <span class="text" id="seo-score">96</span>`
+
+    selectDiv[2].innerHTML = `<div class="sp20"> 
+                                <p class="text">WORD COUNT</p>  
+                                <p class="text note">${getTotalWords}</p> 
+                              </div>
+                            <div class="sp20"> 
+                                <p class="text">LINKS </p>  
+                                <p class="text note">${getTotalLinks}</p> 
+                            </div>
+                                <div class="sp20"> 
+                                <p class="text">IMAGES</p>  
+                                <p class="text note">4</p> 
+                            </div>`
 
     selectDiv[2].classList.add('flex');
 
