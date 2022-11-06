@@ -111,12 +111,15 @@ const LAMP = {
         },
 
         getImages: () => {
+
+            // 06 - GET IMAGES from webpage and store information
             LAMP.select.images.img.forEach((element, index) => {
                 LAMP.data[element.tagName][index] = {
-                    alt: LAMP.select.images.img[index].alt,
-                    chars: LAMP.select.images.img[index].alt.length,
-                    words: LAMP.select.images.img[index].alt.split(' ').length,
+                    alt: element.alt,
+                    chars: element.alt.length,
+                    words: element.alt.split(' ').length,
                 }
+                getTotalImages++;
             }) 
         }
     },
@@ -176,7 +179,7 @@ function createLAMP() {
                             </div>
                                 <div class="sp20"> 
                                 <p class="text">IMAGES</p>  
-                                <p class="text note">4</p> 
+                                <p class="text note">${getTotalImages}</p> 
                             </div>`
 
     selectDiv[2].classList.add('flex');
