@@ -142,24 +142,28 @@ LAMP.start = () => {
 
 
 // Create DIV
-const lampFrame = document.createElement('div');
+const lampFrame = document.createElement('section');
 
 LAMP.start();
 
 function createLAMP() {
+    const lampWrap = document.createElement('section');
+    document.body.prepend(lampWrap);
+    selectWrap = document.querySelector('section');
+    selectWrap.classList.add('lamp');
 
     // 01 - CREATE Lamp App
-    document.body.prepend(lampFrame);
-    lampFrame.classList.add('lamp');
+    selectWrap.append(lampFrame);
+    lampFrame.classList.add('lamp__nav', 'width');
     document.body.style.marginTop = "64px";
 
     // 02 - CREATE 4 <div> inside LAMP App
     for (i = 0; i < 4; i++) {
         const newFrame = document.createElement('div');
-        document.querySelector('.lamp').appendChild(newFrame);
+        document.querySelector('.lamp__nav').appendChild(newFrame);
     }
 
-    const selectDiv = document.querySelectorAll('.lamp > div');
+    const selectDiv = document.querySelectorAll('.lamp__nav > div');
 
     // 03 - CREATE logo for the App
     const createImage = document.createElement('img');
@@ -189,6 +193,47 @@ function createLAMP() {
 
     selectDiv[2].classList.add('flex');
 
+    selectDiv[3].classList.add('flex-end');
+    selectDiv[3].innerHTML = `<button class="text button__primary" id="open-dashboard">
+                                View Dashboard
+                              </button>`
+
+    buildDashboard(selectWrap);
+
 }
 
 createLAMP();
+
+function buildDashboard(selectWrap) {
+    const createDashboard = document.createElement('section');
+    selectWrap.append(createDashboard);
+    
+    const newSection = document.querySelector('.lamp section:nth-child(2)');
+    newSection.classList.add('lamp__dashboard', 'width', 'hide')
+    
+} 
+
+LAMP.dashboard = {
+// 04 - DASHBOARD - Display more detalis about SEO KPIs
+    create: () => {
+        const selectSection = document.querySelectorAll('section');
+        selectSection[2].innerHTML = `<div id="inner-dashboard"></div>`
+
+        for (i = 0; i < 4; i++) {
+            const div = document.createElement('div');
+            document.querySelector('#inner-dashboard').appendChild(div)
+        }
+        
+    },
+    select: {
+        menu: document.querySelector('#open-dashboard'),
+        body: document.querySelector('.lamp__dashboard')
+    },
+    view: () => {
+        LAMP.dashboard.select.body.classList.toggle('hide');
+    }
+
+}
+LAMP.dashboard.create();
+
+LAMP.dashboard.select.menu.addEventListener('click', LAMP.dashboard.view)
