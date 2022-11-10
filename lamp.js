@@ -1,140 +1,145 @@
 const countTotalWords = [];
 let getTotalLinks = 0;
 let getTotalImages = 0;
+const LAMP = {};
 
-const LAMP = {
+LAMP.select = {
+// 00 - SELECT - Used to select the content on the webpage
 
-    select: {
+    meta: {
+        title: document.querySelector('title'),
+        description: document.querySelectorAll('meta'),
 
-        meta: {
-            title: document.querySelector('title'),
-            description: document.querySelectorAll('meta'),
-        },
-
-        text: {
-            h1: document.querySelectorAll('h1'),
-            h2: document.querySelectorAll('h2'),
-            h3: document.querySelectorAll('h3'),
-            h4: document.querySelectorAll('h4'),
-            h5: document.querySelectorAll('h5'),
-            h6: document.querySelectorAll('h6'),
-            p: document.querySelectorAll('p'),
-            li: document.querySelectorAll('li'),        
-        },
-
-        links: {
-            href: document.querySelectorAll('a')
-        },
-
-        images: {
-            img: document.querySelectorAll('img')
-        }
     },
+
+    text: {
+        h1: document.querySelectorAll('h1'),
+        h2: document.querySelectorAll('h2'),
+        h3: document.querySelectorAll('h3'),
+        h4: document.querySelectorAll('h4'),
+        h5: document.querySelectorAll('h5'),
+        h6: document.querySelectorAll('h6'),
+        p: document.querySelectorAll('p'),
+        li: document.querySelectorAll('li'),        
+    },
+
+    links: {
+        href: document.querySelectorAll('a')
+    },
+
+    images: {
+        img: document.querySelectorAll('img')
+    }
+
+},
     
-    data: {
+LAMP.data = {
+// 01 - DATA - Used to store the webpage data
 
-        H1: {},
-        H2: {},
-        H3: {},
-        H4: {},
-        H5: {},
-        H6: {},
-        P: {},
-        LI: {},
-        HREF: {},
-        IMG: {}
+    H1: {},
+    H2: {},
+    H3: {},
+    H4: {},
+    H5: {},
+    H6: {},
+    P: {},
+    LI: {},
+    HREF: {},
+    IMG: {}
         
-    },
+},
 
-    run: {
+LAMP.run = {
+// 02 - FUNCTIONS - Used for processing data from webpage
         
-        getTitle: () => {
+    getTitle: () => {
+    // 02.1. - GET TITLE from webpage
 
-            // 01 - GET TITLE from webpage
-            LAMP.data.title = {
-                text: LAMP.select.meta.title.innerText,
-                chars: LAMP.select.meta.title.innerText.length,
-                words: LAMP.select.meta.title.innerText.split(' ').length
-            }
-            countTotalWords.push(LAMP.select.meta.title.innerText.split(' ').length);     
-        },
-
-        getDescription: () => {
-
-             // 02 - GET META description from webpage
-            LAMP.select.meta.description.forEach((element, index) => {
-                if (LAMP.select.meta.description[index].attributes[0].value === 'description') {
-                    LAMP.data.description = {
-                        text: element.attributes[1].value,
-                        chars: element.attributes[1].value.length,
-                        words: element.attributes[1].value.split(' ').length
-                    }
-                    countTotalWords.push(element.innerText.split(' ').length);     
-                }
-            })
-        },
-
-        getText: () => {
-
-            // 03 - GET Text from webpage
-            for (text in LAMP.select.text) {
-                LAMP.select.text[text].forEach((element, index) => {
-                    LAMP.data[element.tagName][index] = {
-                        text: element.innerText,
-                        chars: element.innerText.length,
-                        words: element.innerText.split(' ').length
-                    }
-
-                    countTotalWords.push(element.innerText.split(' ').length);  
-
-                })
-            }       
-        },
-
-        getTotalWords: () => {
-            
-            // 04 - SUM the array and calculate total words on webpage
-            getTotalWords = countTotalWords.reduce((a, b) => a + b, 0)
-        },
-
-        getLinks: () => {
-            
-            // 05 - GET LINKS from webpage which have https
-            LAMP.select.links.href.forEach((element, index) => {
-                if (element.attributes.href.value.includes('https://')) {
-                    LAMP.data.HREF[index] = {
-                        link: element.attributes.href.value,
-                    }
-                    getTotalLinks++;
-                } 
-            })
-        },
-
-        getImages: () => {
-
-            // 06 - GET IMAGES from webpage and store information
-            LAMP.select.images.img.forEach((element, index) => {
-                LAMP.data[element.tagName][index] = {
-                    alt: element.alt,
-                    chars: element.alt.length,
-                    words: element.alt.split(' ').length,
-                }
-                getTotalImages++;
-            }) 
+        LAMP.data.title = {
+            text: LAMP.select.meta.title.innerText,
+            chars: LAMP.select.meta.title.innerText.length,
+            words: LAMP.select.meta.title.innerText.split(' ').length
         }
+            countTotalWords.push(LAMP.select.meta.title.innerText.split(' ').length);     
     },
 
-   start: () => {
+    getDescription: () => {
+    // 02.2. - GET META description from webpage
 
-       // Execute LAMP Functions
-       LAMP.run.getTitle();
-       LAMP.run.getDescription();
-       LAMP.run.getText();
-       LAMP.run.getTotalWords();
-       LAMP.run.getLinks();
-       LAMP.run.getImages();
-   }
+        LAMP.select.meta.description.forEach((element, index) => {
+            if (LAMP.select.meta.description[index].attributes[0].value === 'description') {
+                LAMP.data.description = {
+                    text: element.attributes[1].value,
+                    chars: element.attributes[1].value.length,
+                    words: element.attributes[1].value.split(' ').length
+                }
+                countTotalWords.push(element.innerText.split(' ').length);     
+            }
+        })
+    },
+
+    getText: () => {
+    // 02.3. - GET Text from webpage
+
+        for (text in LAMP.select.text) {
+            LAMP.select.text[text].forEach((element, index) => {
+                LAMP.data[element.tagName][index] = {
+                    text: element.innerText,
+                    chars: element.innerText.length,
+                    words: element.innerText.split(' ').length
+                }
+
+                countTotalWords.push(element.innerText.split(' ').length);  
+
+            })
+        }       
+    },
+
+    getTotalWords: () => {         
+    // 02.4. - SUM the array and calculate total words on webpage
+
+        getTotalWords = countTotalWords.reduce((a, b) => a + b, 0)
+
+    },
+
+    getLinks: () => {
+    // 02.5. - GET LINKS from webpage which have https
+
+        LAMP.select.links.href.forEach((element, index) => {
+            if (element.attributes.href.value.includes('https://')) {
+                LAMP.data.HREF[index] = {
+                    link: element.attributes.href.value,
+                }
+                getTotalLinks++;
+            } 
+        })
+    },
+
+    getImages: () => {
+    // 02.6. - GET IMAGES from webpage and store information
+
+        LAMP.select.images.img.forEach((element, index) => {
+            LAMP.data[element.tagName][index] = {
+                alt: element.alt,
+                chars: element.alt.length,
+                words: element.alt.split(' ').length,
+            }
+            getTotalImages++;
+        }) 
+    }
 }
+
+LAMP.start = () => {
+// Execute LAMP Functions
+
+    LAMP.run.getTitle();
+    LAMP.run.getDescription();
+    LAMP.run.getText();
+    LAMP.run.getTotalWords();
+    LAMP.run.getLinks();
+    LAMP.run.getImages();
+}
+
 
 // Create DIV
 const lampFrame = document.createElement('div');
