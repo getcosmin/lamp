@@ -44,11 +44,16 @@
     width: min(80vw, 1440px);
 }
 .lamp__dashboard { 
-    display: grid;
-    grid-template-columns: 1fr 1fr;
     width: 100%;
     background-color: var(--color-white);
     min-height: 400px;
+}
+.dashboard__body {
+    height: 100%;
+    padding: 24px 0;
+    display: grid;
+    margin: auto;
+    grid-template-columns: 1fr 1fr;
 }
 .sp20 {
     padding: 0 24px;

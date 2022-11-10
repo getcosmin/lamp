@@ -146,22 +146,27 @@ const lampFrame = document.createElement('section');
 
 LAMP.start();
 
-function createLAMP() {
-    const lampWrap = document.createElement('section');
-    document.body.prepend(lampWrap);
-    selectWrap = document.querySelector('section');
-    selectWrap.classList.add('lamp');
+LAMP.create = {
+    divs: (selector, content) => {
+        for (i = 0; i < 4; i++) {
+            const newFrame = document.createElement(content);
+            selector.appendChild(newFrame);
+        }
+    },
+    frame: () => {
+        const lampWrap = document.createElement('section');
+        document.body.prepend(lampWrap);
+        selectWrap = document.querySelector('section');
+        selectWrap.classList.add('lamp');
 
-    // 01 - CREATE Lamp App
-    selectWrap.append(lampFrame);
-    lampFrame.classList.add('lamp__nav', 'width');
-    document.body.style.marginTop = "64px";
+        // 01 - CREATE Lamp App
+        selectWrap.append(lampFrame);
+        lampFrame.classList.add('lamp__nav', 'width');
+        document.body.style.marginTop = "64px";
 
     // 02 - CREATE 4 <div> inside LAMP App
-    for (i = 0; i < 4; i++) {
-        const newFrame = document.createElement('div');
-        document.querySelector('.lamp__nav').appendChild(newFrame);
-    }
+    const selector = document.querySelector('.lamp__nav');
+    LAMP.create.divs(selector, 'div')
 
     const selectDiv = document.querySelectorAll('.lamp__nav > div');
 
@@ -178,19 +183,6 @@ function createLAMP() {
     selectDiv[1].innerHTML = `<span class="text" id="seo-box">GRADE</span>  
                               <span class="text" id="seo-score">96</span>`
 
-    selectDiv[2].innerHTML = `<div class="sp20"> 
-                                <p class="text">WORD COUNT</p>  
-                                <p class="text note">${getTotalWords}</p> 
-                              </div>
-                            <div class="sp20"> 
-                                <p class="text">LINKS </p>  
-                                <p class="text note">${getTotalLinks}</p> 
-                            </div>
-                                <div class="sp20"> 
-                                <p class="text">IMAGES</p>  
-                                <p class="text note">${getTotalImages}</p> 
-                            </div>`
-
     selectDiv[2].classList.add('flex');
 
     selectDiv[3].classList.add('flex-end');
@@ -199,10 +191,10 @@ function createLAMP() {
                               </button>`
 
     buildDashboard(selectWrap);
-
+    }
 }
 
-createLAMP();
+LAMP.create.frame();
 
 function buildDashboard(selectWrap) {
     const createDashboard = document.createElement('section');
@@ -210,20 +202,35 @@ function buildDashboard(selectWrap) {
     
     const newSection = document.querySelector('.lamp section:nth-child(2)');
     newSection.classList.add('lamp__dashboard', 'width', 'hide')
-    
+   
 } 
 
 LAMP.dashboard = {
 // 04 - DASHBOARD - Display more detalis about SEO KPIs
     create: () => {
         const selectSection = document.querySelectorAll('section');
-        selectSection[2].innerHTML = `<div id="inner-dashboard"></div>`
+        selectSection[2].innerHTML = `<div class="dashboard__body width" id="inner-dashboard"></div>`
 
-        for (i = 0; i < 4; i++) {
-            const div = document.createElement('div');
-            document.querySelector('#inner-dashboard').appendChild(div)
-        }
-        
+        const selector = document.querySelector('#inner-dashboard');
+        LAMP.create.divs(selector, 'div')
+
+        const selectDiv = document.querySelectorAll('.dashboard__body > div');
+
+        selectDiv[0].innerHTML = `<div class="sp20"> 
+                                    <p class="text">WORD COUNT</p>  
+                                    <p class="text note">${getTotalWords}</p> 
+                                  </div>`
+
+        selectDiv[1].innerHTML = `<div class="sp20"> 
+                                    <p class="text">LINKS</p>  
+                                    <p class="text note">${getTotalLinks}</p> 
+                                  </div>`
+
+        selectDiv[2].innerHTML = `<div class="sp20"> 
+                                    <p class="text">IMAGES</p>  
+                                    <p class="text note">${getTotalImages}</p> 
+                                  </div>`
+
     },
     select: {
         menu: document.querySelector('#open-dashboard'),
