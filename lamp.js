@@ -67,14 +67,19 @@ LAMP.run = {
     // 02.2. - GET META description from webpage
 
         LAMP.select.meta.description.forEach((element, index) => {
-            if (LAMP.select.meta.description[index].attributes[0].value === 'description') {
+            if (element.attributes[0].value === 'description') {
                 LAMP.data.description = {
                     text: element.attributes[1].value,
                     chars: element.attributes[1].value.length,
                     words: element.attributes[1].value.split(' ').length
                 }
                 countTotalWords.push(element.innerText.split(' ').length);     
+            } else {
+                LAMP.data.description = {
+                    chars: 0
+                }
             }
+
         })
     },
 
@@ -106,9 +111,9 @@ LAMP.run = {
     // 02.5. - GET LINKS from webpage which have https
 
         LAMP.select.links.href.forEach((element, index) => {
-            if (element.attributes.href.value.includes('https://')) {
+            if (element.href.includes('https://')) {
                 LAMP.data.HREF[index] = {
-                    link: element.attributes.href.value,
+                    link: element.href
                 }
                 getTotalLinks++;
             } 
@@ -129,8 +134,11 @@ LAMP.run = {
     }
 }
 
+
+// ----------------------------------------
+// START - Used to process the webpage information.
+
 LAMP.start = () => {
-// Execute LAMP Functions
 
     LAMP.run.getTitle();
     LAMP.run.getDescription();
@@ -138,6 +146,52 @@ LAMP.start = () => {
     LAMP.run.getTotalWords();
     LAMP.run.getLinks();
     LAMP.run.getImages();
+}
+
+// ----------------------------------------
+// ALERTS - Used to warn user if there are any SEO issues.
+
+LAMP.alert = {
+
+    success: (meta, chars, position) => {
+        position.innerHTML = `<div class="alert__box_success ">
+                                <p class="alert__text_success">${meta} tag has a length of ${chars} and is well optimized. Well done!</p>
+                              </div>`
+    },
+
+    warning: (meta, chars, position, minLength, maxLength) => {
+        position.innerHTML =  `<div class="alert__box_warning ">
+                                <p class="alert__text_warning">${meta} tag has a length of ${chars} and can be improved. We recommand using a
+                                                       length between ${minLength} and ${maxLength}.</p>
+                              </div>`
+    },
+
+    severe: (meta, position, minLength, maxLength) => {
+        position.innerHTML =  `<div class="alert__box_severe ">
+                                <p class="alert__text_severe">${meta} tag is missing. We recommand using
+                                                       one with a length between ${minLength} and ${maxLength}.</p>
+                              </div>`
+    }
+
+}
+
+// ----------------------------------------
+// AUDIT - Scans the data and checks if SEO practices are done well.
+
+LAMP.audit = {
+
+    check: (meta, chars, position, minLength, maxLength) => {
+
+        if (chars === 0) {
+            LAMP.alert.severe(meta, position, minLength, maxLength);
+            
+        } else if (chars >= minLength && chars <= maxLength) {
+            LAMP.alert.success(meta, chars, position, minLength, maxLength);
+
+        } else if (chars < minLength || chars > maxLength) {
+            LAMP.alert.warning(meta, chars, position, minLength, maxLength);
+        }
+    }
 }
 
 
@@ -179,6 +233,8 @@ LAMP.create = {
     getImage.src = "https://getcosmin.dev/assets/misc/lamp/lamp.svg";
 
     
+
+    
     // 03 - Add inner DIVs with KPI
     selectDiv[1].innerHTML = `<span class="text" id="seo-box">GRADE</span>  
                               <span class="text" id="seo-score">96</span>`
@@ -217,19 +273,27 @@ LAMP.dashboard = {
         const selectDiv = document.querySelectorAll('.dashboard__body > div');
 
         selectDiv[0].innerHTML = `<div class="sp20"> 
-                                    <p class="text">WORD COUNT</p>  
-                                    <p class="text note">${getTotalWords}</p> 
+                                    <p class="title">Page Title</p>  
+                                    <p class="text note" id="lamp-title"></p>
+                                  </div>
+                                  
+                                  <div class="sp20"> 
+                                    <p class="title">Description</p>  
+                                    <p class="text note" id="lamp-description"></p> 
                                   </div>`
 
         selectDiv[1].innerHTML = `<div class="sp20"> 
-                                    <p class="text">LINKS</p>  
-                                    <p class="text note">${getTotalLinks}</p> 
-                                  </div>`
-
-        selectDiv[2].innerHTML = `<div class="sp20"> 
-                                    <p class="text">IMAGES</p>  
-                                    <p class="text note">${getTotalImages}</p> 
-                                  </div>`
+                                  <p class="title">Word Count</p>  
+                                  <p class="text note">${getTotalWords}</p> 
+                                </div>
+                                <div class="sp20"> 
+                                  <p class="title">Links</p>  
+                                  <p class="text note">${getTotalLinks}</p> 
+                                </div>
+                                <div class="sp20"> 
+                                  <p class="title">Images</p>  
+                                  <p class="text note">${getTotalImages}</p> 
+                                </div>`
 
     },
     select: {
@@ -243,4 +307,33 @@ LAMP.dashboard = {
 }
 LAMP.dashboard.create();
 
-LAMP.dashboard.select.menu.addEventListener('click', LAMP.dashboard.view)
+// PLACEHOLDER FUNCTION will change
+/*function runCheck() {
+    const meta = LAMP.data.title.chars;
+    position = document.querySelector('#h1T');
+    minLength = 50;
+    maxLength = 60;
+
+    LAMP.audit.check(meta, position, minLength, maxLength);
+    
+}*/
+
+LAMP.audit.check(
+    meta = "Title",
+    chars = LAMP.data.title.chars, 
+    position = document.querySelector('#lamp-title'), 
+    minLength = 50, 
+    maxLength = 60
+    );
+
+LAMP.audit.check(
+    meta = "Description",
+    chars = LAMP.data.description.chars, 
+    position = document.querySelector('#lamp-description'), 
+    minLength = 150, 
+    maxLength = 160
+    );
+
+//runCheck();
+
+LAMP.dashboard.select.menu.addEventListener('click', LAMP.dashboard.view);
