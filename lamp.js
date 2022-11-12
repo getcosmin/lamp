@@ -66,20 +66,17 @@ LAMP.run = {
     getDescription: () => {
     // 02.2. - GET META description from webpage
 
-        LAMP.select.meta.description.forEach((element, index) => {
-            if (element.attributes[0].value === 'description') {
+        LAMP.select.meta.description.forEach((element) => {
+            if (element.name === 'description') {
                 LAMP.data.description = {
-                    text: element.attributes[1].value,
-                    chars: element.attributes[1].value.length,
-                    words: element.attributes[1].value.split(' ').length
+                    text: element.content,
+                    chars: element.content.length,
+                    words: element.content.split(' ').length   
                 }
-                countTotalWords.push(element.innerText.split(' ').length);     
-            } else {
-                LAMP.data.description = {
-                    chars: 0
-                }
-            }
+            
+                countTotalWords.push(element.innerText.split(' ').length); 
 
+            }
         })
     },
 
@@ -154,21 +151,21 @@ LAMP.start = () => {
 LAMP.alert = {
 
     success: (meta, chars, position) => {
-        position.innerHTML = `<div class="alert__box_success ">
-                                <p class="alert__text_success">${meta} tag has a length of ${chars} and is well optimized. Well done!</p>
+        position.innerHTML = `<div class="sp20">
+                                <p class="text">${meta} tag has a length of ${chars} and is well optimized. Well done!</p>
                               </div>`
     },
 
     warning: (meta, chars, position, minLength, maxLength) => {
-        position.innerHTML =  `<div class="alert__box_warning ">
-                                <p class="alert__text_warning">${meta} tag has a length of ${chars} and can be improved. We recommand using a
+        position.innerHTML =  `<div class="sp20">
+                                <p class="text">${meta} tag has a length of ${chars} and can be improved. We recommand using a
                                                        length between ${minLength} and ${maxLength}.</p>
                               </div>`
     },
 
     severe: (meta, position, minLength, maxLength) => {
-        position.innerHTML =  `<div class="alert__box_severe ">
-                                <p class="alert__text_severe">${meta} tag is missing. We recommand using
+        position.innerHTML =  `<div class="sp20">
+                                <p class="text">${meta} tag is missing. We recommand using
                                                        one with a length between ${minLength} and ${maxLength}.</p>
                               </div>`
     }
@@ -201,8 +198,8 @@ const lampFrame = document.createElement('section');
 LAMP.start();
 
 LAMP.create = {
-    divs: (selector, content) => {
-        for (i = 0; i < 4; i++) {
+    divs: (selector, content, size) => {
+        for (i = 0; i < size; i++) {
             const newFrame = document.createElement(content);
             selector.appendChild(newFrame);
         }
@@ -220,7 +217,7 @@ LAMP.create = {
 
     // 02 - CREATE 4 <div> inside LAMP App
     const selector = document.querySelector('.lamp__nav');
-    LAMP.create.divs(selector, 'div')
+    LAMP.create.divs(selector, 'div', 4)
 
     const selectDiv = document.querySelectorAll('.lamp__nav > div');
 
@@ -268,32 +265,46 @@ LAMP.dashboard = {
         selectSection[2].innerHTML = `<div class="dashboard__body width" id="inner-dashboard"></div>`
 
         const selector = document.querySelector('#inner-dashboard');
-        LAMP.create.divs(selector, 'div')
+        LAMP.create.divs(selector, 'div', 5)
 
         const selectDiv = document.querySelectorAll('.dashboard__body > div');
 
-        selectDiv[0].innerHTML = `<div class="sp20"> 
-                                    <p class="title">Page Title</p>  
-                                    <p class="text note" id="lamp-title"></p>
-                                  </div>
-                                  
-                                  <div class="sp20"> 
-                                    <p class="title">Description</p>  
-                                    <p class="text note" id="lamp-description"></p> 
-                                  </div>`
+        // Loop over divs and add classes.
+        for (i = 0; i < selectDiv.length; i++) {
+            selectDiv[i].classList.add(`col${[i + 1]}`, `column__box`)
+        }
 
-        selectDiv[1].innerHTML = `<div class="sp20"> 
+        selectDiv[0].innerHTML = `<div class="sp20"> 
                                   <p class="title">Word Count</p>  
                                   <p class="text note">${getTotalWords}</p> 
                                 </div>
-                                <div class="sp20"> 
-                                  <p class="title">Links</p>  
-                                  <p class="text note">${getTotalLinks}</p> 
-                                </div>
-                                <div class="sp20"> 
+                                <div id="bar-col1"></div>`
+
+        selectDiv[1].innerHTML = `<div class="sp20"> 
+                                    <p class="title">Links</p>  
+                                    <p class="text note">${getTotalLinks}</p> 
+                                  </div>
+                                  <div id="bar-col2"></div>`
+        
+        selectDiv[2].innerHTML =`<div class="sp20"> 
                                   <p class="title">Images</p>  
                                   <p class="text note">${getTotalImages}</p> 
-                                </div>`
+                                </div>
+                                <div id="bar-col3"></div>`
+
+        selectDiv[3].innerHTML = `<div class="sp20"> 
+                                    <p class="title">Page Title</p>  
+                                    <p class="text note">${LAMP.data.description.chars}</p>
+                                  </div>
+                                  <p class="text note" id="lamp-title"></p>
+                                  <div id="bar-col4"></div>`
+        
+        selectDiv[4].innerHTML = `<div class="sp20"> 
+                                    <p class="title">Description</p>  
+                                    <p class="text note">${LAMP.data.description.chars}</p> 
+                                 </div>
+                                 <div><p class="text note" id="lamp-description"></p></div>
+                                 <div id="bar-col5"></div>`
 
     },
     select: {
@@ -325,6 +336,15 @@ LAMP.audit.check(
     minLength = 50, 
     maxLength = 60
     );
+
+function checkDES() {
+    if (LAMP.data.description === undefined) {
+        LAMP.data.description = {
+            chars: 0
+        }
+    } 
+}
+checkDES();
 
 LAMP.audit.check(
     meta = "Description",

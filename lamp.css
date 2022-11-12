@@ -21,14 +21,14 @@
     font-family: var(--font-primary);
     color: var(--color-primary);
 }
-.text {
+.text { 
+    font-size: 14px;
+}
+.title, .note {
+    font-size: 14px;
     margin-block: 0;
     font-size: 14px;
     line-height: 1;
-}
-.title {
-    font-size: 16px;
-    margin-bottom: 8px;
 }
 .lamp {
     flex-wrap: wrap;
@@ -37,7 +37,7 @@
     position: fixed;
     z-index: 50000;
     justify-content: center;
-    background-color: var(--color-primary-10);
+    background-color: var(--color-white);
     border-bottom: 1px solid var(--color-primary-20);
     width: 100vw;
 }
@@ -54,20 +54,48 @@
 .lamp__dashboard { 
     width: 100%;
     background-color: var(--color-white);
-    min-height: 400px;
+    min-height: fit-content;
 }
 .dashboard__body {
     height: 100%;
     padding: 24px 0;
     display: grid;
-    gap: 32px;
+    grid-template-areas: 
+        "col1 col1 col2 col2 col3 col3"
+        "col4 col4 col4 col5 col5 col5";
+    grid-template-columns: repeat(6, 1fr);
+    gap: 24px;
     margin: auto;
-    grid-template-columns: 1fr 1fr;
+}
+.column__box {
+    display: grid;
+    grid-template-rows: 1fr min-content 4px;
+    border: 1px solid var(--color-primary-10);
+    border-radius: 4px;
+}
+.col1, .col2, .col3, .col4, .col5 {
+    min-height: 140px;
+}
+.col1 {
+    grid-area: col1;
+}
+.col2 {
+    grid-area: col2;
+}
+.col3 {
+    grid-area: col3;
+}
+.col4 {
+    grid-area: col4;
+}
+.col5 {
+    grid-area: col5;
 }
 .sp20 {
     padding: 12px 24px;
 }
 .logo {
+    max-width: fit-content;
     height: 24px;
     margin-right: 24px;
 }
@@ -78,12 +106,17 @@
     justify-content: flex-end;
 }
 .note {
+    font-size: 18px;
     color: var(--color-accent);
 }
 .hide {
     display: none;
 }
 .button__primary {
+    text-transform: initial;
+    height: auto;
+    background: inherit;
+    background-color: var(--color-white);
     width: auto;
     color: var(--color-accent);
     border-radius: 30px;
@@ -97,13 +130,7 @@
     padding: 6px 6px;
     margin: 0px 8px;
 }
-.alert__box_warning, .alert__box_success, .alert__box_severe {
-    padding: 16px;
-    border-radius: 4px;
-}
-.alert__box_success {
-    background-color: #a8f39f;
-}
+
 .alert__text_success, .alert__text_warning, .alert__text_severe {
     line-height: 1.4;
     margin-block: 0;
@@ -111,15 +138,9 @@
 .alert__box_success {
     color: #007201; 
 }
-.alert__box_warning {
-    background-color: #ffe280;
-    color: #fb5f00; 
-}
+
 .alert__text_warning {
     color: #785d00; 
-}
-.alert__box_severe {
-    background-color: #ff8080;
 }
 .alert__text_severe {
     color: #770000;
