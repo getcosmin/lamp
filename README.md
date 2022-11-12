@@ -16,9 +16,9 @@ On the second phase, the JavaScript code will start storing the data while count
 
 #### 03 - CHECKING the data.
 On this phase, the JavaScript code will start checking the word count and character length for the following:
-    - page Title
-    - meta Description
-    - webpage text
+    * page Title
+    * meta Description
+    * webpage text
 
 #### 04 - BUILDING UI/UX
 On this phase, the JavaScript code will start injecting HTML and CSS in build up a user interface for the SEO Audit Tool.
