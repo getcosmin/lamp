@@ -49,6 +49,12 @@ LAMP.data = {
         
 },
 
+
+LAMP.score = {
+// SCORE - Calculates the total SEO Score from LAMP
+    total: []
+}
+
 LAMP.run = {
 // 02 - FUNCTIONS - Used for grabbing and storing data from webpage
         
@@ -78,7 +84,8 @@ LAMP.run = {
 
             }
         })
-        // If META Description was not found, add a value for ploceholder.
+
+        // If META Description was not found, add a value as a ploceholder.
         if (LAMP.data.description == undefined) {
             LAMP.data.description = {
                 chars: 0
@@ -117,8 +124,11 @@ LAMP.run = {
         LAMP.select.links.href.forEach((element, index) => {
             if (element.href.includes('https://')) {
                 LAMP.data.HREF[index] = {
-                    link: element.href
+                    link: element.href,
+                    text: element.innerText,
+                    words: element.innerText.split(' ').length,
                 }
+                countTotalWords.push(element.innerText.split(' ').length);  
                 getTotalLinks++;
             } 
         })
@@ -147,8 +157,8 @@ LAMP.start = () => {
     LAMP.run.getTitle();
     LAMP.run.getDescription();
     LAMP.run.getText();
-    LAMP.run.getTotalWords();
     LAMP.run.getLinks();
+    LAMP.run.getTotalWords();
     LAMP.run.getImages();
 }
 
@@ -196,9 +206,11 @@ LAMP.audit = {
             
         } else if (chars >= minLength && chars <= maxLength) {
             LAMP.alert.success(meta, chars, position, bar, minLength, maxLength);
+            LAMP.score.total.push(50);
 
         } else if (chars < minLength || chars > maxLength) {
             LAMP.alert.warning(meta, chars, position, bar, minLength, maxLength);
+            LAMP.score.total.push(25);
         }
     }
 }
@@ -246,7 +258,7 @@ LAMP.create = {
     
     // 03 - Add inner DIVs with KPI
     selectDiv[1].innerHTML = `<span class="text" id="seo-box">GRADE</span>  
-                              <span class="text" id="seo-score">96</span>`
+                              <span class="text" id="seo-score">${LAMP.score.total}</span>`
 
     selectDiv[2].classList.add('flex-end');
     selectDiv[2].innerHTML = `<div class="text button__primary" id="open-dashboard">
@@ -363,6 +375,11 @@ LAMP.audit.check(
     maxLength = 160
 );
 
-//runCheck();
+//CALCULATE TOTAL SCORE
+function calculateScore () {
+    LAMP.score.total = LAMP.score.total.reduce((a, b) => a + b, 0);
+    document.querySelector('#seo-score').innerHTML = `${LAMP.score.total}`
+}
+calculateScore();
 
 LAMP.dashboard.select.menu.addEventListener('click', LAMP.dashboard.view);
