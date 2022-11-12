@@ -4,7 +4,7 @@ let getTotalImages = 0;
 const LAMP = {};
 
 LAMP.select = {
-// 00 - SELECT - Used to select the content on the webpage
+// 00 - SELECT - Used to select webpage content
 
     meta: {
         title: document.querySelector('title'),
@@ -34,7 +34,7 @@ LAMP.select = {
 },
     
 LAMP.data = {
-// 01 - DATA - Used to store the webpage data
+// 01 - DATA - Placeholders to store the webpage data
 
     H1: {},
     H2: {},
@@ -50,7 +50,7 @@ LAMP.data = {
 },
 
 LAMP.run = {
-// 02 - FUNCTIONS - Used for processing data from webpage
+// 02 - FUNCTIONS - Used for grabbing and storing data from webpage
         
     getTitle: () => {
     // 02.1. - GET TITLE from webpage
@@ -153,7 +153,7 @@ LAMP.start = () => {
 }
 
 // ----------------------------------------
-// ALERTS - Used to warn user if there are any SEO issues.
+// ALERTS - Points out SEO issues and gives suggestions to fix.
 
 LAMP.alert = {
 
@@ -185,7 +185,7 @@ LAMP.alert = {
 }
 
 // ----------------------------------------
-// AUDIT - Scans the data and checks if SEO practices are done well.
+// AUDIT - Checks the data returns SEO suggestions.
 
 LAMP.audit = {
 
@@ -233,7 +233,7 @@ LAMP.create = {
 
     const selectDiv = document.querySelectorAll('.lamp__nav > div');
 
-    // 03 - CREATE logo for the App
+    // 03 - LAMP logo - create image with link
     const createImage = document.createElement('img');
 
     selectDiv[0].appendChild(createImage).classList.add('logo');
@@ -270,7 +270,7 @@ function buildDashboard(selectWrap) {
 } 
 
 LAMP.dashboard = {
-// 04 - DASHBOARD - Display more detalis about SEO KPIs
+// 04 - DASHBOARD - Build the dashboard user interface
     create: () => {
         const selectSection = document.querySelectorAll('section');
         selectSection[2].innerHTML = `<div class="dashboard__body width" id="inner-dashboard"></div>`
@@ -280,7 +280,7 @@ LAMP.dashboard = {
 
         const selectDiv = document.querySelectorAll('.dashboard__body > div');
 
-        // Loop over divs and add classes.
+        // LOOP over divs and add classes to them
         for (i = 0; i < selectDiv.length; i++) {
             selectDiv[i].classList.add(`dashboard__card`, `col${[i + 1]}`)
         }
@@ -331,26 +331,18 @@ LAMP.dashboard = {
 }
 LAMP.dashboard.create();
 
-// PLACEHOLDER FUNCTION will change
-/*function runCheck() {
-    const meta = LAMP.data.title.chars;
-    position = document.querySelector('#h1T');
-    minLength = 50;
-    maxLength = 60;
-
-    LAMP.audit.check(meta, position, minLength, maxLength);
-    
-}*/
-
+// Perform SEO Audit on title description
 LAMP.audit.check(
     meta = "title",
     chars = LAMP.data.title.chars, 
     position = document.querySelector('#lamp-title'),
     bar = document.querySelector('#bar-col4'), 
-    minLength = 50, 
+    minLength = 40, 
     maxLength = 60
 );
 
+// Function checks if meta description was found.
+// #TODO: Restructure function in the future.
 function checkDES() {
     if (LAMP.data.description === undefined) {
         LAMP.data.description = {
@@ -358,14 +350,16 @@ function checkDES() {
         }
     } 
 }
+
 checkDES();
 
+// Perform SEO Audit on meta description
 LAMP.audit.check(
     meta = "description",
     chars = LAMP.data.description.chars, 
     position = document.querySelector('#lamp-description'),
     bar = document.querySelector('#bar-col5'), 
-    minLength = 150, 
+    minLength = 140, 
     maxLength = 160
 );
 
