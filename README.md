@@ -9,10 +9,10 @@ LAMP is a Google Chrome extension made with JavaScript, CSS and HTML. The extens
 ## SEO Audit Features: 
 
 #### 01 - SCANS the website. 
-This first phase will scan the website to extract the content and store it inside objects.
+This first phase will scan the website to extract the content and store it inside objects for easy access.
 
 #### 02 - STORING the data. 
-On the second phase, the JavaScript code will start storing the data while counting the total number of words, links and images.
+While storing the data, the JavaScript code will start counting the total number of words, links and images.
 
 #### 03 - CHECKING the data. 
 On this phase, the JavaScript code will start checking the word count and character length for the following:
