@@ -20,7 +20,7 @@ On this phase, the JavaScript code will start checking the word count and charac
     * meta Description
     * webpage text
 
-#### 04 - BUILDING UI/UX #####
+#### 04 - BUILDING UI/UX ####
 On this phase, the JavaScript code will start injecting HTML and CSS in build up a user interface for the SEO Audit Tool.
 
 #### 05 - SEO SUGGESTIONS ####
