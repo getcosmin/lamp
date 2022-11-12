@@ -163,24 +163,3 @@
     padding: 8px;
     margin: 0px 8px;
 }
-
-.alert__text_success, .alert__text_warning, .alert__text_severe {
-    line-height: 1.4;
-    margin-block: 0;
-}
-.alert__box_success {
-    color: #007201; 
-}
-
-.alert__text_warning {
-    color: #785d00; 
-}
-.alert__text_severe {
-    color: #770000;
-}
-.meta-box {
-    margin-top: 24px;
-    border: 1px solid var(--color-primary-10);
-    border-radius: 4px;
-    padding: 8px;
-}
