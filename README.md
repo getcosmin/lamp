@@ -1,2 +1,2 @@
-# lamp
-Project LAMP - SEO Monitor Tool
+# LAMP
+Basic SEO Audit Tool

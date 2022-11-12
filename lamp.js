@@ -78,6 +78,13 @@ LAMP.run = {
 
             }
         })
+        // If META Description was not found, add a value for ploceholder.
+        if (LAMP.data.description == undefined) {
+            LAMP.data.description = {
+                chars: 0
+            }
+        }
+
     },
 
     getText: () => {
@@ -150,24 +157,29 @@ LAMP.start = () => {
 
 LAMP.alert = {
 
-    success: (meta, chars, position) => {
+    success: (meta, chars, position, bar) => {
         position.innerHTML = `<div class="sp20">
-                                <p class="text">${meta} tag has a length of ${chars} and is well optimized. Well done!</p>
+                                <span class="text">Well done! </br> 
+                                Your ${meta} has ${chars} characters.</span>
                               </div>`
+        bar.classList.add('alert__success');
     },
 
-    warning: (meta, chars, position, minLength, maxLength) => {
+    warning: (meta, chars, position, bar, minLength, maxLength) => {
         position.innerHTML =  `<div class="sp20">
-                                <p class="text">${meta} tag has a length of ${chars} and can be improved. We recommand using a
-                                                       length between ${minLength} and ${maxLength}.</p>
+                                <span class="text">Optimization can be improved! </br> 
+                                Keep ${meta} between ${minLength} - ${maxLength} characters.</span>
                               </div>`
+
+        bar.classList.add('alert__warning');
     },
 
-    severe: (meta, position, minLength, maxLength) => {
+    severe: (meta, chars, position, bar, minLength, maxLength) => {
         position.innerHTML =  `<div class="sp20">
-                                <p class="text">${meta} tag is missing. We recommand using
-                                                       one with a length between ${minLength} and ${maxLength}.</p>
+                                <span class="text">Urgent issue needs fixing! </br>
+                                Keep ${meta} between ${minLength} - ${maxLength} characters.</span>
                               </div>`
+        bar.classList.add('alert__severe');
     }
 
 }
@@ -177,16 +189,16 @@ LAMP.alert = {
 
 LAMP.audit = {
 
-    check: (meta, chars, position, minLength, maxLength) => {
+    check: (meta, chars, position, bar, minLength, maxLength) => {
 
         if (chars === 0) {
-            LAMP.alert.severe(meta, position, minLength, maxLength);
+            LAMP.alert.severe(meta, chars, position, bar, minLength, maxLength);
             
         } else if (chars >= minLength && chars <= maxLength) {
-            LAMP.alert.success(meta, chars, position, minLength, maxLength);
+            LAMP.alert.success(meta, chars, position, bar, minLength, maxLength);
 
         } else if (chars < minLength || chars > maxLength) {
-            LAMP.alert.warning(meta, chars, position, minLength, maxLength);
+            LAMP.alert.warning(meta, chars, position, bar, minLength, maxLength);
         }
     }
 }
@@ -217,7 +229,7 @@ LAMP.create = {
 
     // 02 - CREATE 4 <div> inside LAMP App
     const selector = document.querySelector('.lamp__nav');
-    LAMP.create.divs(selector, 'div', 4)
+    LAMP.create.divs(selector, 'div', 3)
 
     const selectDiv = document.querySelectorAll('.lamp__nav > div');
 
@@ -236,12 +248,11 @@ LAMP.create = {
     selectDiv[1].innerHTML = `<span class="text" id="seo-box">GRADE</span>  
                               <span class="text" id="seo-score">96</span>`
 
-    selectDiv[2].classList.add('flex');
-
-    selectDiv[3].classList.add('flex-end');
-    selectDiv[3].innerHTML = `<button class="text button__primary" id="open-dashboard">
+    selectDiv[2].classList.add('flex-end');
+    selectDiv[2].innerHTML = `<div class="text button__primary" id="open-dashboard">
+                                <img class="lamp-icon" src="https://getcosmin.dev/assets/misc/lamp/lamp-menu.svg">
                                 View Dashboard
-                              </button>`
+                              </div>`
 
     buildDashboard(selectWrap);
     }
@@ -271,39 +282,41 @@ LAMP.dashboard = {
 
         // Loop over divs and add classes.
         for (i = 0; i < selectDiv.length; i++) {
-            selectDiv[i].classList.add(`col${[i + 1]}`, `column__box`)
+            selectDiv[i].classList.add(`dashboard__card`, `col${[i + 1]}`)
         }
 
         selectDiv[0].innerHTML = `<div class="sp20"> 
-                                  <p class="title">Word Count</p>  
-                                  <p class="text note">${getTotalWords}</p> 
+                                  <p class="dashboard__kpi_title">Word Count</p>  
+                                  <p class="dashboard__kpi_value">${getTotalWords}</p> 
                                 </div>
                                 <div id="bar-col1"></div>`
 
         selectDiv[1].innerHTML = `<div class="sp20"> 
-                                    <p class="title">Links</p>  
-                                    <p class="text note">${getTotalLinks}</p> 
+                                    <p class="dashboard__kpi_title">Links</p>  
+                                    <p class="dashboard__kpi_value">${getTotalLinks}</p> 
                                   </div>
                                   <div id="bar-col2"></div>`
         
         selectDiv[2].innerHTML =`<div class="sp20"> 
-                                  <p class="title">Images</p>  
-                                  <p class="text note">${getTotalImages}</p> 
+                                  <p class="dashboard__kpi_title">Images</p>  
+                                  <p class="dashboard__kpi_value">${getTotalImages}</p> 
                                 </div>
                                 <div id="bar-col3"></div>`
 
         selectDiv[3].innerHTML = `<div class="sp20"> 
-                                    <p class="title">Page Title</p>  
-                                    <p class="text note">${LAMP.data.description.chars}</p>
+                                    <p class="dashboard__kpi_title">Page Title</p>  
+                                    <p class="dashboard__kpi_value">${LAMP.data.title.chars}
+                                    <span class="xs"> characters</span></p>
                                   </div>
-                                  <p class="text note" id="lamp-title"></p>
+                                  <span class="text" id="lamp-title"></span>
                                   <div id="bar-col4"></div>`
         
         selectDiv[4].innerHTML = `<div class="sp20"> 
-                                    <p class="title">Description</p>  
-                                    <p class="text note">${LAMP.data.description.chars}</p> 
+                                    <p class="dashboard__kpi_title">Description</p>  
+                                    <p class="dashboard__kpi_value">${LAMP.data.description.chars}
+                                    <span class="xs"> characters</span></p> 
                                  </div>
-                                 <div><p class="text note" id="lamp-description"></p></div>
+                                 <div><span class="note" id="lamp-description"></span></div>
                                  <div id="bar-col5"></div>`
 
     },
@@ -330,12 +343,13 @@ LAMP.dashboard.create();
 }*/
 
 LAMP.audit.check(
-    meta = "Title",
+    meta = "title",
     chars = LAMP.data.title.chars, 
-    position = document.querySelector('#lamp-title'), 
+    position = document.querySelector('#lamp-title'),
+    bar = document.querySelector('#bar-col4'), 
     minLength = 50, 
     maxLength = 60
-    );
+);
 
 function checkDES() {
     if (LAMP.data.description === undefined) {
@@ -347,12 +361,13 @@ function checkDES() {
 checkDES();
 
 LAMP.audit.check(
-    meta = "Description",
+    meta = "description",
     chars = LAMP.data.description.chars, 
-    position = document.querySelector('#lamp-description'), 
+    position = document.querySelector('#lamp-description'),
+    bar = document.querySelector('#bar-col5'), 
     minLength = 150, 
     maxLength = 160
-    );
+);
 
 //runCheck();
 

@@ -2,8 +2,8 @@
     "manifest_version": 3,
     "name": "LAMP",
     "author": "Cosmin Alexandru",
-    "description": "This is a free SEO Tool used to analyze your webpage.",
-    "version": "0.1.0",
+    "description": "LAMP is a basic SEO Audit Tool which allows its users to perform audits on different webpages.",
+    "version": "0.3.0",
 
     "icons": {
         "16": "/icons/lamp_16px.png",
