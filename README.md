@@ -28,9 +28,9 @@ On this phase, the JavaScript code will start injecting HTML and CSS in build up
 After the data has been checked, LAMP will give out a couple of suggestions in order to fix out the SEO, or point out if page title or page description is missing.
 
 ## TODO: 
-*This project will be improved and added in my front-end portfolio.*
+This project will be improved and added in my front-end portfolio.
 
-*I plan on adding more features such as:* 
+I plan on adding more features such as:
   * Checking if images have an alt tag
   * Finding the number of internal links
   * And many more
