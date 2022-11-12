@@ -16,10 +16,9 @@ version: 0.3.0
 
 #### 03 - CHECKING the data. 
 *On this phase, the JavaScript code will start checking the word count and character length for the following:* 
-* List:
-    * page Title 
-    * meta Description 
-    * webpage text
+  * page Title 
+  * meta Description 
+  * webpage text
 
 
 #### 04 - BUILDING UI/UX 
@@ -32,7 +31,7 @@ version: 0.3.0
 *This project will be improved and added in my front-end portfolio.*
 
 *I plan on adding more features such as:* 
-    1. Checking if images have an alt tag
-    2. Finding the number of internal links
-    3. And other features
+  * Checking if images have an alt tag
+  * Finding the number of internal links
+  * And many more
 
