@@ -30,7 +30,7 @@ Once the data has been checked, LAMP will give out a couple of suggestions in or
 This project will be improved and added in my front-end portfolio.
 
 I plan on adding more features such as: 
-    - Checking if images have an alt tag
-    - Finding the number of internal links
-    - And other features
+    * Checking if images have an alt tag
+    * Finding the number of internal links
+    * And other features
 
