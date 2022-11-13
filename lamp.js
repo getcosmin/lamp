@@ -2,6 +2,7 @@ const countTotalWords = [];
 let getTotalLinks = 0;
 let getTotalImages = 0;
 const LAMP = {};
+const removeSymbols = /!|#|-|0|1|2|3|4|5|6|7|8|9|_|'|"|@-/g;
 
 LAMP.select = {
 // 00 - SELECT - Used to select webpage content
@@ -62,25 +63,25 @@ LAMP.run = {
     // 02.1. - GET TITLE from webpage
 
         LAMP.data.title = {
-            text: LAMP.select.meta.title.innerText,
-            chars: LAMP.select.meta.title.innerText.length,
-            words: LAMP.select.meta.title.innerText.split(' ').length
+            text: LAMP.select.meta.title.innerText.replace(removeSymbols, ''),
+            chars: LAMP.select.meta.title.innerText.replace(removeSymbols, '').length,
+            words: LAMP.select.meta.title.innerText.replace(removeSymbols, '').split(' ').length
         }
-            countTotalWords.push(LAMP.select.meta.title.innerText.split(' ').length);     
+            countTotalWords.push(LAMP.select.meta.title.innerText.replace(removeSymbols, '').split(' ').filter(word => word !== '').length);     
     },
 
     getDescription: () => {
     // 02.2. - GET META description from webpage
 
         LAMP.select.meta.description.forEach((element) => {
-            if (element.name === 'description') {
+            if (element.name === 'description' || element.name === 'Description') {
                 LAMP.data.description = {
-                    text: element.content,
-                    chars: element.content.length,
-                    words: element.content.split(' ').length   
+                    text: element.content.replace(removeSymbols, ''),
+                    chars: element.content.replace(removeSymbols, '').length,
+                    words: element.content.replace(removeSymbols, '').split(' ').filter(word => word !== '').length   
                 }
             
-                countTotalWords.push(element.innerText.split(' ').length); 
+                countTotalWords.push(element.innerText.replace(removeSymbols, '').split(' ').length); 
 
             }
         })
@@ -99,13 +100,14 @@ LAMP.run = {
 
         for (text in LAMP.select.text) {
             LAMP.select.text[text].forEach((element, index) => {
+                let stringWords = element.innerText.replace(removeSymbols, '');
                 LAMP.data[element.tagName][index] = {
-                    text: element.innerText,
-                    chars: element.innerText.length,
-                    words: element.innerText.split(' ').length
+                    text: stringWords,
+                    chars: stringWords.length,
+                    words: stringWords.split(' ').filter(word => word !== '').length
                 }
 
-                countTotalWords.push(element.innerText.split(' ').length);  
+                countTotalWords.push(stringWords.split(' ').filter(word => word !== '').length);  
 
             })
         }       
@@ -128,7 +130,7 @@ LAMP.run = {
                     text: element.innerText,
                     words: element.innerText.split(' ').length,
                 }
-                countTotalWords.push(element.innerText.split(' ').length);  
+                countTotalWords.push(element.innerText.split(' ').filter(word => word !== '').length);  
                 getTotalLinks++;
             } 
         })
@@ -187,7 +189,7 @@ LAMP.alert = {
     severe: (meta, chars, position, bar, minLength, maxLength) => {
         position.innerHTML =  `<div class="sp20">
                                 <span class="text">Urgent issue needs fixing! </br>
-                                Keep ${meta} between ${minLength} - ${maxLength} characters.</span>
+                                Write a ${meta} between ${minLength} - ${maxLength} characters.</span>
                               </div>`
         bar.classList.add('alert__severe');
     }
